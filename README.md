@@ -1,5 +1,5 @@
 # Hangman
-Basic Python Hangman Game
+Python Hangman Game for TKinter or CommandLine
 - Updated to be easily swapped from tkinter or command line based
 
 ## Components - Command Line
