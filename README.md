@@ -29,5 +29,5 @@ Basic Python Hangman Game
 
 
 ## Issues Encountered
-There seems to be no means of expanding or manipulating messagebox size
-Bug: Keys remained disabled once new game was started
+- There seems to be no means of expanding or manipulating messagebox size - Left as is
+- Bug: Keys remained disabled once new game was started - Fixed
