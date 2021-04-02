@@ -86,8 +86,8 @@ def hangman():
         print('-----------------------')
 
 
-# Command Line only ^ just needs hangman()
-
+# Command Line only ^ just needs hangman() - And to comment out the tkinter version below
+# hangman()
 # Building this out with Tkinter Instead below
 window = Tk()
 window.title("Hangman")
@@ -98,6 +98,7 @@ def newGame():
     global numberOfGuesses
     global lives_left
     global the_word
+    assignButtons()
     lives_left.set(10)
     numberOfGuesses = 0
     the_word = get_hangman_word().lower()
@@ -110,6 +111,14 @@ def guess(letter):
     global lives_left
     txt = list(the_word_withSpaces)
     guessed = list(lblWord.get())
+
+    counter = 0
+    for c in ascii_lowercase:
+        if(c == letter):
+            buttonlist[counter].config(state="disabled")
+        else:
+            counter = counter + 1
+
     if the_word_withSpaces.count(letter) > 0:
         for c in range(len(txt)):
             if txt[c] == letter:
@@ -137,26 +146,38 @@ def guess(letter):
             # Restart Game
             newGame()
 
+# Made this to solve the buttons being disabled even into new games
+
+
+def assignButtons():
+    global buttonlist
+    buttonlist = []
+    n = 0
+    for c in ascii_lowercase:
+        btn = Button(window, text=c, command=lambda c=c: guess(c), font=(
+            "Helvetica 18"), width=4)
+        btn.grid(row=2+n//9, column=n % 9)
+        buttonlist.append(btn)
+        n += 1
+
 
 # Answer displayed as guessing
 lblWord = StringVar()
 WordLabel = Label(window, textvariable=lblWord, font=("Consoles 24 bold"))
 WordLabel.grid(row=0, column=3, columnspan=6, padx=10)
 
+# Phrase before the lives variable are shown
+lives_string = "Lives Left: "
+LivesLabel = Label(window, text=lives_string,
+                   font=("Consoles 18 bold"))
+LivesLabel.grid(row=0, column=0, columnspan=2)
+
 # Displaying Lives Left
 lives_left = IntVar()
-lives_string = "Lives Left {}".format(lives_left)
-LivesLabel = Label(window, textvariable=lives_left,
-                   font=("Consoles 24 bold"))
-LivesLabel.grid(row=0, column=1, columnspan=3)
+LivesCounterLabel = Label(window, textvariable=lives_left,
+                          font=("Consoles 24 bold"))
+LivesCounterLabel.grid(row=0, column=2, columnspan=1)
 
-# All english letters to be present
-n = 0
-buttonlist = []
-for c in ascii_lowercase:
-    Button(window, text=c, command=lambda c=c: guess(c), font=(
-        "Helvetica 18"), width=4).grid(row=1+n//9, column=n % 9)
-    n += 1
 
 # Run Game
 newGame()

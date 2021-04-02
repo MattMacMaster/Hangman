@@ -1,5 +1,6 @@
 # Hangman
 Basic Python Hangman Game
+- Updated to be easily swapped from tkinter or command line based
 
 ## Components - Command Line
 - Json file of words to choose from randomly - Done
@@ -10,7 +11,7 @@ Basic Python Hangman Game
 
 ## Components - Tkinter Version
 - Visuals for all previous components - Done 
-- Disable used letters or show a list
+- Disable used letters or show a list - Done
 - Win or lose Screen - Done
 - Again or close Prompt - Done
 
@@ -29,3 +30,4 @@ Basic Python Hangman Game
 
 ## Issues Encountered
 There seems to be no means of expanding or manipulating messagebox size
+Bug: Keys remained disabled once new game was started
