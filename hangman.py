@@ -1,5 +1,8 @@
 import random
 from json_data import word
+from tkinter import *
+from tkinter import messagebox
+from string import ascii_lowercase
 
 # This is to ask at the end of a game to restart, or close the program
 
@@ -83,4 +86,79 @@ def hangman():
         print('-----------------------')
 
 
-hangman()
+# Command Line only ^ just needs hangman()
+
+# Building this out with Tkinter Instead below
+window = Tk()
+window.title("Hangman")
+
+
+def newGame():
+    global the_word_withSpaces
+    global numberOfGuesses
+    global lives_left
+    global the_word
+    lives_left.set(10)
+    numberOfGuesses = 0
+    the_word = get_hangman_word().lower()
+    the_word_withSpaces = " ".join(the_word)
+    lblWord.set(" ".join("_"*len(the_word)))
+
+
+def guess(letter):
+    global numberOfGuesses
+    global lives_left
+    txt = list(the_word_withSpaces)
+    guessed = list(lblWord.get())
+    if the_word_withSpaces.count(letter) > 0:
+        for c in range(len(txt)):
+            if txt[c] == letter:
+                guessed[c] = letter
+            lblWord.set("".join(guessed))
+    else:
+        numberOfGuesses += 1
+        lives_left.set(lives_left.get() - 1)
+    # Check lives, if zero, lose
+    if lives_left.get() <= 0:
+        response = messagebox.askquestion(title="You Have Lost",
+                                          message=" The Word was: {} - Do you wish to play again".format(the_word))
+        if(response == "no"):
+            window.destroy()
+        else:
+            # Restart Game
+            newGame()
+    # Check Word, if filled, Win
+    if "_" not in lblWord.get():
+        response = messagebox.askquestion(title="You Have WON!!!!!!!",
+                                          message="Do you wish to play again")
+        if(response == "no"):
+            window.destroy()
+        else:
+            # Restart Game
+            newGame()
+
+
+# Answer displayed as guessing
+lblWord = StringVar()
+WordLabel = Label(window, textvariable=lblWord, font=("Consoles 24 bold"))
+WordLabel.grid(row=0, column=3, columnspan=6, padx=10)
+
+# Displaying Lives Left
+lives_left = IntVar()
+lives_string = "Lives Left {}".format(lives_left)
+LivesLabel = Label(window, textvariable=lives_left,
+                   font=("Consoles 24 bold"))
+LivesLabel.grid(row=0, column=1, columnspan=3)
+
+# All english letters to be present
+n = 0
+buttonlist = []
+for c in ascii_lowercase:
+    Button(window, text=c, command=lambda c=c: guess(c), font=(
+        "Helvetica 18"), width=4).grid(row=1+n//9, column=n % 9)
+    n += 1
+
+# Run Game
+newGame()
+window.mainloop()
+# hangman()
