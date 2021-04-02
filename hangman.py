@@ -7,7 +7,7 @@ from string import ascii_lowercase
 # This is to ask at the end of a game to restart, or close the program
 
 
-def restart_prompt():
+def restartPrompt():
     val = input("Play Again? (y/n):").lower()
     if(val == "y"):
         hangman()
@@ -15,11 +15,11 @@ def restart_prompt():
         quit()
 
 
-def get_hangman_word():
+def getHangmanWord():
     return random.choice(word)
 
 
-def valid_input(answer):
+def validInput(answer):
     # Allows single character answer only
     if(len(answer) > 1):
         return False
@@ -33,55 +33,55 @@ def valid_input(answer):
 
 
 def hangman():
-    word = get_hangman_word()
-    chosen_letters = []
+    word = getHangmanWord()
+    chosenLetters = []
     lives = 8
-    answer_string = []
+    answerString = []
     i = 0
     while i < len(word):
-        answer_string.append("_")
+        answerString.append("_")
         i = i + 1
     while True:
         print('--------HANGMAN--------')
         print("Lives Left:{}".format(lives))
-        print("Letters Chosen So Far:", ' '.join(chosen_letters))
-        print(" ".join(answer_string))
+        print("Letters Chosen So Far:", ' '.join(chosenLetters))
+        print(" ".join(answerString))
         val = input("Enter your letter: ").lower()
 
         # Must Pass answer requirements to continue
-        if(valid_input(val) == False):
+        if(validInput(val) == False):
             print("---Invalid Input---")
         # Duplicate Choice Check
-        elif(val in chosen_letters):
+        elif(val in chosenLetters):
             print("You have used this letter already.")
         # After this check, see if its in the word or not and act accordingly
         else:
             # Correct Guess
             if(val in word):
-                chosen_letters.append(val)
+                chosenLetters.append(val)
                 # Update Answer String - find index in word and replace index in string with letter
                 counter = 0
                 for x in word:
                     if(x == val):
-                        answer_string[counter] = val
+                        answerString[counter] = val
                         counter = counter + 1
                     else:
                         counter = counter + 1
             # Incorrect Guess
             else:
-                chosen_letters.append(val)
+                chosenLetters.append(val)
                 lives = lives - 1
         # Check Lives and word, if ones complete break, and ask to repeat or close\
         if(lives <= 0):
             print("You Lose")
             print("The word was: {}".format(word))
 
-            restart_prompt()
+            restartPrompt()
 
-        elif("_" not in answer_string):
+        elif("_" not in answerString):
             print("The word was: {}".format(word))
             print("You Won!!!!!")
-            restart_prompt()
+            restartPrompt()
 
         print('-----------------------')
 
@@ -94,43 +94,43 @@ window.title("Hangman")
 
 
 def newGame():
-    global the_word_withSpaces
+    global theWordWithSpaces
     global numberOfGuesses
-    global lives_left
-    global the_word
+    global livesLeft
+    global theWord
     assignButtons()
-    lives_left.set(10)
+    livesLeft.set(10)
     numberOfGuesses = 0
-    the_word = get_hangman_word().lower()
-    the_word_withSpaces = " ".join(the_word)
-    lblWord.set(" ".join("_"*len(the_word)))
+    theWord = getHangmanWord().lower()
+    theWordWithSpaces = " ".join(theWord)
+    lblWord.set(" ".join("_"*len(theWord)))
 
 
 def guess(letter):
     global numberOfGuesses
-    global lives_left
-    txt = list(the_word_withSpaces)
+    global livesLeft
+    txt = list(theWordWithSpaces)
     guessed = list(lblWord.get())
 
     counter = 0
     for c in ascii_lowercase:
         if(c == letter):
-            buttonlist[counter].config(state="disabled")
+            buttonList[counter].config(state="disabled")
         else:
             counter = counter + 1
 
-    if the_word_withSpaces.count(letter) > 0:
+    if theWordWithSpaces.count(letter) > 0:
         for c in range(len(txt)):
             if txt[c] == letter:
                 guessed[c] = letter
             lblWord.set("".join(guessed))
     else:
         numberOfGuesses += 1
-        lives_left.set(lives_left.get() - 1)
+        livesLeft.set(livesLeft.get() - 1)
     # Check lives, if zero, lose
-    if lives_left.get() <= 0:
+    if livesLeft.get() <= 0:
         response = messagebox.askquestion(title="You Have Lost",
-                                          message=" The Word was: {} - Do you wish to play again".format(the_word))
+                                          message=" The Word was: {} - Do you wish to play again".format(theWord))
         if(response == "no"):
             window.destroy()
         else:
@@ -150,14 +150,14 @@ def guess(letter):
 
 
 def assignButtons():
-    global buttonlist
-    buttonlist = []
+    global buttonList
+    buttonList = []
     n = 0
     for c in ascii_lowercase:
         btn = Button(window, text=c, command=lambda c=c: guess(c), font=(
             "Helvetica 18"), width=4)
         btn.grid(row=2+n//9, column=n % 9)
-        buttonlist.append(btn)
+        buttonList.append(btn)
         n += 1
 
 
@@ -167,16 +167,16 @@ WordLabel = Label(window, textvariable=lblWord, font=("Consoles 24 bold"))
 WordLabel.grid(row=0, column=3, columnspan=6, padx=10)
 
 # Phrase before the lives variable are shown
-lives_string = "Lives Left: "
-LivesLabel = Label(window, text=lives_string,
+livesString = "Lives Left: "
+livesLabel = Label(window, text=livesString,
                    font=("Consoles 18 bold"))
-LivesLabel.grid(row=0, column=0, columnspan=2)
+livesLabel.grid(row=0, column=0, columnspan=2)
 
 # Displaying Lives Left
-lives_left = IntVar()
-LivesCounterLabel = Label(window, textvariable=lives_left,
+livesLeft = IntVar()
+livesCounterLabel = Label(window, textvariable=livesLeft,
                           font=("Consoles 24 bold"))
-LivesCounterLabel.grid(row=0, column=2, columnspan=1)
+livesCounterLabel.grid(row=0, column=2, columnspan=1)
 
 
 # Run Game
